@@ -20,6 +20,28 @@ app.get("/", (req, res) => {
   res.send("Hello, TypeScript with Express!");
 });
 
+app.get("/tarefas/:id", (req, res) => {
+  const id = req.params.id;
+  const tasks = readJsonFile<ITask[]>("dados/tasks.json");
+  const task = tasks.find((task: ITask) => task.id === id);
+
+  res.send(task);
+});
+
+app.get("/tarefas", (req, res) => {
+  const tasks = readJsonFile<ITask[]>("dados/tasks.json");
+  res.send(tasks);
+});
+
+app.post("/tarefas", (req, res) => {
+  const task = req.body;
+  console.log(task);
+  const tasks = readJsonFile<ITask[]>("dados/tasks.json");
+  tasks.push(task);
+  writeJsonFile("dados/tasks.json", tasks);
+  res.send(task);
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
